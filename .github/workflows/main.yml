@@ -1,16 +1,24 @@
-on:
-  push:
-    branches: [master]
-  pull_request:
+###############################################
+# Run GitHub's Super Linter against code base #
+###############################################
+
+---
+name: GitHub's Super Linter
+on: push
+
 jobs:
-  lint:
+  run-linters:
+    name: GitHub's Super Linter
     runs-on: ubuntu-latest
+
     steps:
-      - run: dotnet --info
-      - uses: actions/checkout@v2
-      - uses: github/super-linter@v3
+      - name: Check out Git repository
+        uses: actions/checkout@master
+        
+      - name: Run GitHub Super Linter
+        uses: github/super-linter@main
         env:
-          FILTER_REGEX_EXCLUDE: \bLICENSE$|\w*\.sln$|\blog\.txt$
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_SHFMT: false
-          VALIDATE_EDITORCONFIG: false

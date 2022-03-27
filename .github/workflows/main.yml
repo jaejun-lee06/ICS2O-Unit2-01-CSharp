@@ -4,21 +4,19 @@
 
 ---
 name: GitHub's Super Linter
-on: push
-
+on:
+  push:
+    branches: [master]
+  pull_request:
 jobs:
-  run-linters:
-    name: GitHub's Super Linter
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@master
-        
-      - name: Run GitHub Super Linter
-        uses: github/super-linter@main
+      - run: dotnet --info
+      - uses: actions/checkout@v2
+      - uses: github/super-linter@v3
         env:
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          DEFAULT_BRANCH: main
+          FILTER_REGEX_EXCLUDE: \bLICENSE$|\w*\.sln$|\blog\.txt$
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_SHFMT: false
+          VALIDATE_EDITORCONFIG: false
